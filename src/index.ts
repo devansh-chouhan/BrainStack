@@ -3,7 +3,8 @@ import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import cors from "cors";
 import dotenv from "dotenv";
-import { userModel } from "./db.js";
+import { contentModel, userModel } from "./db.js";
+import { userMiddleware } from "./middleware.js";
 
 dotenv.config();
 
@@ -18,13 +19,16 @@ app.post("/api/v1/signup", async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    await userModel.create({
+    const newUser = await userModel.create({
       username,
       password,
     });
 
+    const token = jwt.sign({ id: newUser._id }, JWT_PASSWORD as string);
+
     res.json({
       message: "User created successfully",
+      token,
     });
   } catch (e) {
     res.status(411).json({
@@ -53,9 +57,49 @@ app.post("/api/v1/signin", async (req, res) => {
   }
 });
 
-app.post("/api/v1/content", (req, res) => {});
+app.post("/api/v1/content", userMiddleware, async (req, res) => {
+  const { title, link } = req.body;
+  await contentModel.create({
+    title,
+    link,
+    //@ts-ignore
+    userId: req.userId,
+  });
 
-app.delete("/api/v1/content", (req, res) => {});
+  return res.json({
+    message: "Content added",
+  });
+});
+
+app.get("/api/v1/content", userMiddleware, async (req, res) => {
+  //@ts-ignore
+  const userId = req.userId;
+  const allContent = await contentModel
+    .find({
+      userId,
+    })
+    .populate("userId", "username");
+
+  if (allContent.length === 0) {
+    return res.json({
+      message: "No content found , please create content first",
+    });
+  }
+  res.json({
+    allContent,
+  });
+});
+
+app.delete("/api/v1/content", userMiddleware, async (req, res) => {
+  const { contentId } = req.body;
+  //@ts-ignore
+  const userId = req.userId;
+  await contentModel.deleteMany({ _id: contentId, userId });
+
+  res.json({
+    message: "Content deleted",
+  });
+});
 
 app.post("/api/v1/brain/share", (req, res) => {});
 

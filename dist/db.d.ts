@@ -1,36 +1,36 @@
-import { Schema } from "mongoose";
-declare const userModel: import("mongoose").Model<{
+import mongoose from "mongoose";
+declare const userModel: mongoose.Model<{
     password?: string | null;
     username?: string | null;
 }, {}, {}, {
     id: string;
-}, import("mongoose").Document<unknown, {}, {
+}, mongoose.Document<unknown, {}, {
     password?: string | null;
     username?: string | null;
 }, {
     id: string;
-}, import("mongoose").DefaultSchemaOptions> & Omit<{
+}, mongoose.DefaultSchemaOptions> & Omit<{
     password?: string | null;
     username?: string | null;
 } & {
-    _id: import("mongoose").Types.ObjectId;
+    _id: mongoose.Types.ObjectId;
 } & {
     __v: number;
 }, "id"> & {
     id: string;
-}, Schema<any, import("mongoose").Model<any, any, any, any, any, any, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, {
+}, mongoose.Schema<any, mongoose.Model<any, any, any, any, any, any, any>, {}, {}, {}, {}, mongoose.DefaultSchemaOptions, {
     password?: string | null;
     username?: string | null;
-}, import("mongoose").Document<unknown, {}, {
+}, mongoose.Document<unknown, {}, {
     password?: string | null;
     username?: string | null;
 }, {
     id: string;
-}, import("mongoose").DefaultSchemaOptions> & Omit<{
+}, mongoose.DefaultSchemaOptions> & Omit<{
     password?: string | null;
     username?: string | null;
 } & {
-    _id: import("mongoose").Types.ObjectId;
+    _id: mongoose.Types.ObjectId;
 } & {
     __v: number;
 }, "id"> & {
@@ -39,16 +39,83 @@ declare const userModel: import("mongoose").Model<{
     password?: string | null;
     username?: string | null;
 } & {
-    _id: import("mongoose").Types.ObjectId;
+    _id: mongoose.Types.ObjectId;
 } & {
     __v: number;
 }>, {
     password?: string | null;
     username?: string | null;
 } & {
-    _id: import("mongoose").Types.ObjectId;
+    _id: mongoose.Types.ObjectId;
 } & {
     __v: number;
 }>;
-export { userModel };
+declare const contentModel: mongoose.Model<{
+    tags: mongoose.Types.ObjectId[];
+    userId: mongoose.Types.ObjectId;
+    title?: string | null;
+    link?: string | null;
+}, {}, {}, {
+    id: string;
+}, mongoose.Document<unknown, {}, {
+    tags: mongoose.Types.ObjectId[];
+    userId: mongoose.Types.ObjectId;
+    title?: string | null;
+    link?: string | null;
+}, {
+    id: string;
+}, mongoose.DefaultSchemaOptions> & Omit<{
+    tags: mongoose.Types.ObjectId[];
+    userId: mongoose.Types.ObjectId;
+    title?: string | null;
+    link?: string | null;
+} & {
+    _id: mongoose.Types.ObjectId;
+} & {
+    __v: number;
+}, "id"> & {
+    id: string;
+}, mongoose.Schema<any, mongoose.Model<any, any, any, any, any, any, any>, {}, {}, {}, {}, mongoose.DefaultSchemaOptions, {
+    tags: mongoose.Types.ObjectId[];
+    userId: mongoose.Types.ObjectId;
+    title?: string | null;
+    link?: string | null;
+}, mongoose.Document<unknown, {}, {
+    tags: mongoose.Types.ObjectId[];
+    userId: mongoose.Types.ObjectId;
+    title?: string | null;
+    link?: string | null;
+}, {
+    id: string;
+}, mongoose.DefaultSchemaOptions> & Omit<{
+    tags: mongoose.Types.ObjectId[];
+    userId: mongoose.Types.ObjectId;
+    title?: string | null;
+    link?: string | null;
+} & {
+    _id: mongoose.Types.ObjectId;
+} & {
+    __v: number;
+}, "id"> & {
+    id: string;
+}, unknown, {
+    tags: mongoose.Types.ObjectId[];
+    userId: mongoose.Types.ObjectId;
+    title?: string | null;
+    link?: string | null;
+} & {
+    _id: mongoose.Types.ObjectId;
+} & {
+    __v: number;
+}>, {
+    tags: mongoose.Types.ObjectId[];
+    userId: mongoose.Types.ObjectId;
+    title?: string | null;
+    link?: string | null;
+} & {
+    _id: mongoose.Types.ObjectId;
+} & {
+    __v: number;
+}>;
+export { userModel, contentModel };
 //# sourceMappingURL=db.d.ts.map
