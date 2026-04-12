@@ -2,14 +2,17 @@ import express from "express";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import cors from "cors";
+import dotenv from "dotenv";
 import { userModel } from "./db.js";
+
+dotenv.config();
+
+const JWT_PASSWORD = process.env.JWT_PASSWORD;
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
-
-const JWT_PASSWORD = "hwofbkw";
 
 app.post("/api/v1/signup", async (req, res) => {
   const { username, password } = req.body;
@@ -39,7 +42,7 @@ app.post("/api/v1/signin", async (req, res) => {
   });
 
   if (user) {
-    const token = jwt.sign({ id: user._id }, JWT_PASSWORD);
+    const token = jwt.sign({ id: user._id }, JWT_PASSWORD as string);
     res.json({
       token,
     });
@@ -60,7 +63,7 @@ app.get("/api/v1/brain/:sharelink", (req, res) => {});
 
 async function main() {
   await mongoose
-    .connect("")
+    .connect(process.env.MONGO_URL as string)
     .then(() => console.log("Connected to MongoDB"))
     .catch((err) => console.log(err));
 

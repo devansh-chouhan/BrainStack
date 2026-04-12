@@ -2,11 +2,13 @@ import express from "express";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import cors from "cors";
+import dotenv from "dotenv";
 import { userModel } from "./db.js";
+dotenv.config();
+const JWT_PASSWORD = process.env.JWT_PASSWORD;
 const app = express();
 app.use(express.json());
 app.use(cors());
-const JWT_PASSWORD = "hwofbkw";
 app.post("/api/v1/signup", async (req, res) => {
     const { username, password } = req.body;
     try {
@@ -48,7 +50,7 @@ app.post("/api/v1/brain/share", (req, res) => { });
 app.get("/api/v1/brain/:sharelink", (req, res) => { });
 async function main() {
     await mongoose
-        .connect("mongodb://devanshchouhan16892_db_user:brainstack@ac-wewffdj-shard-00-00.uthb0ku.mongodb.net:27017,ac-wewffdj-shard-00-01.uthb0ku.mongodb.net:27017,ac-wewffdj-shard-00-02.uthb0ku.mongodb.net:27017/?ssl=true&replicaSet=atlas-q81u7r-shard-0&authSource=admin&appName=brainstack")
+        .connect(process.env.MONGO_URL)
         .then(() => console.log("Connected to MongoDB"))
         .catch((err) => console.log(err));
     app.listen(3000, () => {
