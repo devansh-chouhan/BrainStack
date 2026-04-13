@@ -3,8 +3,9 @@ import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import cors from "cors";
 import dotenv from "dotenv";
-import { contentModel, userModel } from "./db.js";
+import { contentModel, linkModel, userModel } from "./db.js";
 import { userMiddleware } from "./middleware.js";
+import { random } from "./utils.js";
 dotenv.config();
 const JWT_PASSWORD = process.env.JWT_PASSWORD;
 const app = express();
@@ -85,8 +86,70 @@ app.delete("/api/v1/content", userMiddleware, async (req, res) => {
         message: "Content deleted",
     });
 });
-app.post("/api/v1/brain/share", (req, res) => { });
-app.get("/api/v1/brain/:sharelink", (req, res) => { });
+app.post("/api/v1/brain/share", userMiddleware, async (req, res) => {
+    const { share } = req.body;
+    if (share) {
+        const existingLink = await linkModel.findOne({
+            //@ts-ignore
+            userId: req.userId,
+        });
+        if (existingLink) {
+            res.json({
+                hash: existingLink.hash,
+            });
+        }
+        const hash = random(10);
+        await linkModel.create({
+            // @ts-ignore
+            userId: req.userId,
+            hash: hash,
+        });
+        res.json({
+            hash,
+        });
+    }
+    else {
+        const existingLink = await linkModel.findOne({
+            //@ts-ignore
+            userId: req.userId,
+        });
+        if (!existingLink) {
+            res.json({
+                message: "No Link Found",
+            });
+            return;
+        }
+        await linkModel.deleteOne({
+            //@ts-ignore
+            userId: req.userId,
+        });
+        res.json({
+            message: "Removed Link",
+        });
+    }
+});
+app.get("/api/v1/brain/:shareLink", async (req, res) => {
+    const hash = req.params.shareLink;
+    const link = await linkModel.findOne({
+        hash: hash,
+    });
+    if (!link) {
+        res.json({
+            message: "Sorry Incorrect Input",
+        });
+        return;
+    }
+    const content = await contentModel.find({
+        userId: link.userId,
+    });
+    const user = await userModel.findOne({
+        _id: link.userId,
+    });
+    res.json({
+        username: user?.username,
+        content,
+    });
+});
 async function main() {
     await mongoose
         .connect(process.env.MONGO_URL)

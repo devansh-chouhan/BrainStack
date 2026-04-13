@@ -9,7 +9,12 @@ const contentSchema = new Schema({
     tags: [{ type: mongoose.Types.ObjectId, ref: "tag" }],
     userId: { type: mongoose.Types.ObjectId, ref: "user", required: true },
 });
+const linkSchema = new Schema({
+    hash: String,
+    userId: { type: mongoose.Types.ObjectId, ref: "user", required: true },
+});
 const userModel = model("user", userSchema);
 const contentModel = model("content", contentSchema);
-export { userModel, contentModel };
+const linkModel = model("link", linkSchema);
+export { userModel, contentModel, linkModel };
 //# sourceMappingURL=db.js.map
