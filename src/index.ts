@@ -102,6 +102,24 @@ app.delete("/api/v1/content", userMiddleware, async (req, res) => {
   });
 });
 
+app.get("/api/v1/brain/is-sharable", userMiddleware, async (req, res) => {
+  //@ts-ignore
+  const userId = req.userId;
+  const link = await linkModel.findOne({
+    userId,
+  });
+
+  if (link) {
+    res.json({
+      hash: link.hash,
+    });
+  } else {
+    res.json({
+      message: "Not Sharable",
+    });
+  }
+});
+
 app.post("/api/v1/brain/share", userMiddleware, async (req, res) => {
   const { share } = req.body;
 
