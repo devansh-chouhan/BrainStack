@@ -10,7 +10,9 @@ dotenv.config();
 const JWT_PASSWORD = process.env.JWT_PASSWORD;
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: "https://brain-stack-ui-alpha.vercel.app/",
+}));
 app.post("/api/v1/signup", async (req, res) => {
     const { username, password } = req.body;
     try {
@@ -188,8 +190,9 @@ async function main() {
         .connect(process.env.MONGO_URL)
         .then(() => console.log("Connected to MongoDB"))
         .catch((err) => console.log(err));
-    app.listen(3000, () => {
-        console.log("Server is running on port 3000");
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
     });
 }
 main();

@@ -14,7 +14,11 @@ const JWT_PASSWORD = process.env.JWT_PASSWORD;
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://brain-stack-ui-alpha.vercel.app/",
+  }),
+);
 
 app.post("/api/v1/signup", async (req, res) => {
   const { username, password } = req.body;
