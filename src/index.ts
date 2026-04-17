@@ -197,6 +197,26 @@ app.get("/api/v1/brain/:shareLink", async (req, res) => {
   });
 });
 
+app.get("/api/v1/settings", userMiddleware, async (req, res) => {
+  //@ts-ignore
+  const user = await userModel.findOne({
+    //@ts-ignore
+    _id: req.userId,
+  });
+
+  const link = await linkModel.findOne({
+    //@ts-ignore
+    userId: req.userId,
+  });
+
+  const sharable = link ? true : false;
+
+  res.json({
+    username: user?.username,
+    sharable,
+  });
+});
+
 async function main() {
   await mongoose
     .connect(process.env.MONGO_URL as string)
