@@ -16,7 +16,7 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: "https://brain-stack-ui-alpha.vercel.app",
+    origin: "https://brain-stack-ui.vercel.app",
   }),
 );
 
